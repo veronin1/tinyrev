@@ -2,5 +2,15 @@
 
 tiny review website
 
-site: `https://reviews.veronin.dev`
+site: [reviews.veronin.dev](https://reviews.veronin.dev)
+
+## Usage
+
+```bash
+# install dependencies
+npm install
+
+# start dev server
+npm run dev
+```
 
