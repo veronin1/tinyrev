@@ -3,7 +3,17 @@ import Link from "next/link";
 export default function Home() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen font-mono text-3xl">
-      <div>tinyrev</div>
+      <div>
+        <Link href="/">tinyrev</Link>
+      </div>
+
+      <div className="search mt-4">
+        <input
+          type="search"
+          placeholder="Search..."
+          className="border border-gray-400 rounded p-2 text-lg"
+        />
+      </div>
 
       <div className="footer mt-8">
         <ul className="flex gap-4">
