@@ -1,6 +1,6 @@
 const getMovie = async(query) => {
     const apiKey = process.env.OMDB_API_KEY;
-    const params = {
+    const params =  {
         apikey: apiKey,
         s: query,
     };
@@ -11,16 +11,21 @@ const getMovie = async(query) => {
         throw new Error(`${res.statusText}`);
     }
 
-    res.json();
+    return res.json();
 }
 
 const Inception = await getMovie('Inception');
 
 const MovieList = async () => {
-    const movies = await getMovie();
     return (
         <ul>
-            {Inception}
+            {Inception.Search?.map((movie) => (
+                <li key={movie.imdbID}>
+                    {movie.Title} ({movie.Year})
+                </li>
+                ))}
         </ul>
-    )
-}
+    );
+};
+
+export default MovieList;
