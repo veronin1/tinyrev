@@ -1,13 +1,18 @@
+'use client'
 import { createClient} from "@supabase/supabase-js";
 
+
 export async function addReview() {
-    const supabase = await createClient();
+    const supabase = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    );
     const { data: reviews, error } = await supabase.from();
 }
 
-const getMovie = async(query) => {
+const searchOMDB = async (query) => {
     const apiKey = process.env.OMDB_API_KEY;
-    const params =  {
+    const params = {
         apikey: apiKey,
         s: query,
     };
@@ -21,14 +26,21 @@ const getMovie = async(query) => {
     return res.json();
 }
 
+
+
 export default function Admin() {
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        await addReview();
+    };
+
     return (
         <div className="flex flex-col items-center justify-center min-h-screen font-mono p-8">
             <div className="text-3xl mb-8">
                 <p>tinyrev admin</p>
             </div>
 
-            <form className="flex flex-col gap-4 w-full max-w-2xl text-lg">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full max-w-2xl text-lg">
                 <div className="flex flex-col">
                     <label htmlFor="type" className="mb-2 font-semibold">review type *</label>
                     <select
