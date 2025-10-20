@@ -5,6 +5,22 @@ export async function addReview() {
     const { data: reviews, error } = await supabase.from();
 }
 
+const getMovie = async(query) => {
+    const apiKey = process.env.OMDB_API_KEY;
+    const params =  {
+        apikey: apiKey,
+        s: query,
+    };
+
+    const res = await fetch(`https://www.omdbapi.com/?${new URLSearchParams(params)}`);
+
+    if (!res.ok) {
+        throw new Error(`${res.statusText}`);
+    }
+
+    return res.json();
+}
+
 export default function Admin() {
     return (
         <div className="flex flex-col items-center justify-center min-h-screen font-mono p-8">
