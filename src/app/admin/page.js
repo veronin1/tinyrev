@@ -29,7 +29,7 @@ export default function Admin() {
                 </div>
 
                 <div className="flex flex-col">
-                    <label htmlFor="title" className="mb-2 font-semibold">Title *</label>
+                    <label htmlFor="title" className="mb-2 font-semibold">title</label>
                     <input 
                         type="text" 
                         id="title" 
@@ -41,7 +41,7 @@ export default function Admin() {
                 </div>
 
                 <div className="flex flex-col">
-                    <label htmlFor="rating" className="mb-2 font-semibold">Rating (1-10) *</label>
+                    <label htmlFor="rating" className="mb-2 font-semibold">bigger rating</label>
                     <input 
                         type="number" 
                         id="rating" 
@@ -50,57 +50,26 @@ export default function Admin() {
                         max="10" 
                         step="0.1"
                         required
-                        placeholder="7.5"
+                        placeholder="0.0"
                         className="border border-gray-300 rounded p-2"
                     />
                 </div>
 
                 <div className="flex flex-col">
-                    <label htmlFor="review" className="mb-2 font-semibold">Review *</label>
-                    <textarea 
-                        id="review" 
-                        name="review" 
-                        rows="6"
+                    <label htmlFor="rating" className="mb-2 font-semibold">tiny rating</label>
+                    <input
+                        type="number"
+                        id="rating"
+                        name="rating"
+                        min="1"
+                        max="10"
+                        step="0.1"
                         required
-                        placeholder="Write your review here..."
+                        placeholder="0.0"
                         className="border border-gray-300 rounded p-2"
                     />
                 </div>
 
-                <div className="flex flex-col">
-                    <label htmlFor="year" className="mb-2 font-semibold">Release Year</label>
-                    <input 
-                        type="number" 
-                        id="year" 
-                        name="year" 
-                        min="1900" 
-                        max="2099"
-                        placeholder="2024"
-                        className="border border-gray-300 rounded p-2"
-                    />
-                </div>
-
-                <div className="flex flex-col">
-                    <label htmlFor="genre" className="mb-2 font-semibold">Genre</label>
-                    <input 
-                        type="text" 
-                        id="genre" 
-                        name="genre"
-                        placeholder="Action, Drama, etc."
-                        className="border border-gray-300 rounded p-2"
-                    />
-                </div>
-
-                <div className="flex flex-col">
-                    <label htmlFor="image_url" className="mb-2 font-semibold">Image URL</label>
-                    <input 
-                        type="url" 
-                        id="image_url" 
-                        name="image_url"
-                        placeholder="https://example.com/image.jpg"
-                        className="border border-gray-300 rounded p-2"
-                    />
-                </div>
 
                 <button 
                     type="submit"
