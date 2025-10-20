@@ -14,40 +14,40 @@ export default function Admin() {
 
             <form className="flex flex-col gap-4 w-full max-w-2xl text-lg">
                 <div className="flex flex-col">
-                    <label htmlFor="type" className="mb-2 font-semibold">Review Type *</label>
-                    <select 
-                        id="type" 
-                        name="type" 
+                    <label htmlFor="type" className="mb-2 font-semibold">review type *</label>
+                    <select
+                        id="type"
+                        name="type"
                         required
                         className="border border-gray-300 rounded p-2 bg-white"
                     >
-                        <option value="">Select type</option>
-                        <option value="movie">Movie</option>
-                        <option value="series">Series</option>
-                        <option value="game">Game</option>
+                        <option value="">select type</option>
+                        <option value="movie">movie</option>
+                        <option value="series">series</option>
+                        <option value="game">game</option>
                     </select>
                 </div>
 
                 <div className="flex flex-col">
                     <label htmlFor="title" className="mb-2 font-semibold">title</label>
-                    <input 
-                        type="text" 
-                        id="title" 
-                        name="title" 
+                    <input
+                        type="text"
+                        id="title"
+                        name="title"
                         required
-                        placeholder="Enter title"
+                        placeholder="enter title"
                         className="border border-gray-300 rounded p-2"
                     />
                 </div>
 
                 <div className="flex flex-col">
                     <label htmlFor="rating" className="mb-2 font-semibold">bigger rating</label>
-                    <input 
-                        type="number" 
-                        id="rating" 
-                        name="rating" 
-                        min="1" 
-                        max="10" 
+                    <input
+                        type="number"
+                        id="rating"
+                        name="rating"
+                        min="1"
+                        max="10"
                         step="0.1"
                         required
                         placeholder="0.0"
@@ -70,12 +70,11 @@ export default function Admin() {
                     />
                 </div>
 
-
-                <button 
+                <button
                     type="submit"
                     className="bg-black text-white rounded p-3 mt-4 hover:bg-gray-800 transition-colors font-semibold"
                 >
-                    Add Review
+                    add review
                 </button>
             </form>
         </div>
