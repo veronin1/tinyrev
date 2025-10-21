@@ -12,9 +12,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "tinyrev",
-  description: "tinyrev - tiny reviews",
+    title: "tinyrev",
+    description: "tinyrev - tiny reviews",
 };
+
 
 export default function RootLayout({ children }) {
   return (
