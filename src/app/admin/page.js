@@ -81,7 +81,7 @@ const getMovieDetails = async (imdbID) => {
 
 const getMovieDetailsByTitle = async (title) => {
     const movies = await searchOMDB(title);
-    if (movies.length === 0) {
+    if (!movies || movies.length === 0) {
         throw new Error("Movie not found");
     }
 
