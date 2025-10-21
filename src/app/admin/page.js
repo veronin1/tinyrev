@@ -25,7 +25,7 @@ const searchOMDB = async (query) => {
     }
 
     const data = await res.json();
-    if (data.response === "False") {
+    if (data.Response === "False") {
         throw new Error(data.Error);
     }
 
