@@ -19,14 +19,44 @@ const searchOMDB = async (query) => {
 
     const res = await fetch(`https://www.omdbapi.com/?${new URLSearchParams(params)}`);
 
+
     if (!res.ok) {
-        throw new Error(`${res.statusText}`);
+        throw new Error(res.statusText);
     }
 
-    return res.json();
-}
+    const data = await res.json();
+    if (data.response === "False") {
+        throw new Error(data.Error);
+    }
 
+    return data.Search;
+};
 
+const getMovieDetails = async (imdbID) => {
+    const apiKey = process.env.OMDB_API_KEY;
+    const params = {
+        apikey: apiKey,
+        i: imdbID,
+    };
+
+    const res = await fetch(`https://www.omdbapi.com/?${new URLSearchParams(params)}`);
+    if (!res.ok) {
+        throw new Error(res.statusText);
+    }
+
+    const data = await res.json();
+    if (data.response === "False") {
+        throw new Error(data.Error);
+    }
+
+    return {
+        title: data.Title,
+        year: data.Year,
+        poster: data.Poster,
+        imdbRating: data.imdbRating,
+        imdbID: data.imdbID,
+    };
+};
 
 export default function Admin() {
     const handleSubmit = async (e) => {
