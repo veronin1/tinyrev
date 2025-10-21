@@ -1,6 +1,29 @@
 'use client'
 import { createClient} from "@supabase/supabase-js";
 
+export const getAuthenticatedUser = async () => {
+    const supabase = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    );
+
+    const { data, error } = await supabase.auth.getUser();
+
+    if (error) {
+        throw new Error(error.message);
+    }
+
+    return data.user;
+}
+
+export const signOut = async() => {
+    const supabase = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    );
+
+    await supabase.auth.signOut();
+}
 
 export async function addReview() {
     const supabase = createClient(
@@ -8,11 +31,14 @@ export async function addReview() {
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
     );
 
+
+
     const movie = await getMovieDetailsByTitle(document.getElementById("title").value);
 
     const { data, error } = await supabase
         .from("reviews")
         .insert({
+            user_id: "0fef90a6-732b-4416-bcdf-52625880fceb",
             type: document.getElementById("type").value,
             title: movie.title,
             year: movie.year,
