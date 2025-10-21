@@ -32,51 +32,27 @@ export async function addReview() {
 }
 
 const searchOMDB = async (query) => {
-    const apiKey = process.env.OMDB_API_KEY;
-    const params = {
-        apikey: apiKey,
-        s: query,
-    };
-
-    const res = await fetch(`https://www.omdbapi.com/?${new URLSearchParams(params)}`);
-
+    const res = await fetch(`/api/omdb?title=${encodeURIComponent(query)}`);
 
     if (!res.ok) {
-        throw new Error(res.statusText);
+        const errorData = await res.json();
+        throw new Error(errorData.error || res.statusText);
     }
 
     const data = await res.json();
-    if (data.Response === "False") {
-        throw new Error(data.Error);
-    }
-
-    return data.Search;
+    return data.movies;
 };
 
 const getMovieDetails = async (imdbID) => {
-    const apiKey = process.env.OMDB_API_KEY;
-    const params = {
-        apikey: apiKey,
-        i: imdbID,
-    };
+    const res = await fetch(`/api/omdb?imdbID=${encodeURIComponent(imdbID)}`);
 
-    const res = await fetch(`https://www.omdbapi.com/?${new URLSearchParams(params)}`);
     if (!res.ok) {
-        throw new Error(res.statusText);
+        const errorData = await res.json();
+        throw new Error(errorData.error || res.statusText);
     }
 
     const data = await res.json();
-    if (data.Response === "False") {
-        throw new Error(data.Error);
-    }
-
-    return {
-        title: data.Title,
-        year: data.Year,
-        poster: data.Poster,
-        imdbRating: data.imdbRating,
-        imdbID: data.imdbID,
-    };
+    return data;
 };
 
 const getMovieDetailsByTitle = async (title) => {
