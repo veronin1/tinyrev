@@ -35,12 +35,54 @@ export default function Login() {
     };
 
     return (
-        <div>
-            <form onSubmit={handleLogin}>
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                <button type="submit">Login</button>
+        <div className="flex flex-col items-center justify-center min-h-screen font-mono p-8">
+            <div className="text-3xl mb-8">
+                <p>tinyrev login</p>
+            </div>
+
+            <form onSubmit={handleLogin} className="flex flex-col gap-4 w-full max-w-md">
+                {error && (
+                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                        {error}
+                    </div>
+                )}
+
+                <div className="flex flex-col">
+                    <label htmlFor="email" className="mb-2 font-semibold">email</label>
+                    <input
+                        type="email"
+                        id="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                        placeholder="bingles@bootdog.com"
+                        className="border border-gray-300 rounded p-2"
+                        disabled={loading}
+                    />
+                </div>
+
+                <div className="flex flex-col">
+                    <label htmlFor="password" className="mb-2 font-semibold">password</label>
+                    <input
+                        type="password"
+                        id="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                        placeholder="••••••••"
+                        className="border border-gray-300 rounded p-2"
+                        disabled={loading}
+                    />
+                </div>
+
+                <button
+                    type="submit"
+                    disabled={loading}
+                    className="bg-black text-white rounded p-3 mt-4 hover:bg-gray-800 transition-colors font-semibold disabled:bg-gray-400"
+                >
+                    {loading ? 'logging in...' : 'login'}
+                </button>
             </form>
         </div>
-    )
+    );
 }
