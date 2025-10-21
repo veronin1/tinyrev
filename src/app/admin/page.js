@@ -45,7 +45,7 @@ const getMovieDetails = async (imdbID) => {
     }
 
     const data = await res.json();
-    if (data.response === "False") {
+    if (data.Response === "False") {
         throw new Error(data.Error);
     }
 
@@ -57,6 +57,16 @@ const getMovieDetails = async (imdbID) => {
         imdbID: data.imdbID,
     };
 };
+
+const getMovieDetailsByTitle = async (title) => {
+    const movies = await searchOMDB(title);
+    if (movies.length === 0) {
+        throw new Error("Movie not found");
+    }
+
+    const movie = movies[0];
+    return getMovieDetails(movie.imdbID);
+}
 
 export default function Admin() {
     const handleSubmit = async (e) => {
