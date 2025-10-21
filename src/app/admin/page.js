@@ -7,7 +7,28 @@ export async function addReview() {
         process.env.NEXT_PUBLIC_SUPABASE_URL,
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
     );
-    const { data: reviews, error } = await supabase.from();
+
+    const movie = await getMovieDetailsByTitle(document.getElementById("title").value);
+
+    const { data, error } = await supabase
+        .from("reviews")
+        .insert({
+            type: document.getElementById("type").value,
+            title: movie.title,
+            year: movie.year,
+            genre: movie.genre,
+            poster_url: movie.poster,
+            imdbid: movie.imdbID,
+            imdb_rating: movie.imdbRating,
+            my_rating: document.getElementById("bigger-rating").value,
+            wife_rating: document.getElementById("smaller-rating").value,
+        })
+
+    if (error) {
+        throw new Error(error.message);
+    }
+
+    return data;
 }
 
 const searchOMDB = async (query) => {
@@ -112,7 +133,7 @@ export default function Admin() {
                     <label htmlFor="rating" className="mb-2 font-semibold">bigger rating</label>
                     <input
                         type="number"
-                        id="rating"
+                        id="bigger-rating"
                         name="rating"
                         min="1"
                         max="10"
@@ -127,7 +148,7 @@ export default function Admin() {
                     <label htmlFor="rating" className="mb-2 font-semibold">tiny rating</label>
                     <input
                         type="number"
-                        id="rating"
+                        id="smaller-rating"
                         name="rating"
                         min="1"
                         max="10"
