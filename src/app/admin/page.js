@@ -89,6 +89,7 @@ const getMovieDetailsByTitleOrId = async (input) => {
 
 export default function Admin() {
     const [fetchedTitle, setFetchedTitle] = useState("");
+    const [selectedType, setSelectedType] = useState("");
 
     const handleTitleBlur = async (e) => {
         const titleInput = e.target.value;
@@ -124,6 +125,10 @@ export default function Admin() {
         }
     };
 
+    const getSelectedType = (e) => {
+        setSelectedType(e.target.value);
+    };
+
     return (
         <div className="flex flex-col items-center justify-center min-h-screen font-mono p-8">
             <div className="text-3xl mb-8">
@@ -138,6 +143,7 @@ export default function Admin() {
                         name="type"
                         required
                         className="border border-gray-300 rounded p-2 bg-white"
+                        onChange={getSelectedType}
                     >
                         <option value="">select type</option>
                         <option value="movie">movie</option>
@@ -158,7 +164,7 @@ export default function Admin() {
                         onBlur={handleTitleBlur}
                     />
                     {fetchedTitle && (
-                        <p className="text-sm text-gray-600 mt-1">Matched movie: {fetchedTitle}</p>
+                        <p className="text-sm text-gray-600 mt-1">Matched {selectedType}: {fetchedTitle}</p>
                     )}
                 </div>
 
