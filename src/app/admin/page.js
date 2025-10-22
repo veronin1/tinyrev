@@ -15,7 +15,7 @@ export async function addReview({ type, title, biggerRating, smallerRating }) {
     console.log('User ID:', session.user.id);
     console.log('Session:', session);
 
-    const movie = await getMovieDetailsByTitle(document.getElementById("title").value);
+    const movie = await getMovieDetailsByTitle(title);
 
     const { data, error } = await supabase
         .from("reviews")
