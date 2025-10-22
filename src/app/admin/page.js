@@ -1,5 +1,5 @@
 'use client'
-import { supabase } from '../../../utils/supabase/client'
+import {supabase} from '../../../utils/supabase/client'
 import {useState} from "react";
 
 export const signOut = async() => {
@@ -67,17 +67,18 @@ const getMovieDetails = async (imdbID) => {
         throw new Error(errorData.error || res.statusText);
     }
 
-    const data = await res.json();
-    return data;
+    return await res.json();
 };
 
 const getMovieDetailsByTitleOrId = async (input) => {
-    const isImdbId = /^tt\d+$/i.test(input.trim());
+    input = input.trim();
+
+    const isImdbId = /^tt\d+$/i.test(input);
 
     if (isImdbId) {
         return getMovieDetails(input);
     } else {
-        const movies = await searchOMDB(title);
+        const movies = await searchOMDB(input);
         if (!movies || movies.length === 0) {
             throw new Error("Movie not found");
         }
