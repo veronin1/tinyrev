@@ -82,8 +82,8 @@ export default function Admin() {
             const formData = new FormData(e.target);
             const type = formData.get('type');
             const title = formData.get('title');
-            const biggerRating = formData.get('bigger-rating');
-            const smallerRating = formData.get('smaller-rating');
+            const biggerRating = formData.get('big_rating');
+            const smallerRating = formData.get('small_rating');
 
             await addReview({type, title, biggerRating, smallerRating});
             alert('Review added successfully');
@@ -132,8 +132,8 @@ export default function Admin() {
                     <label htmlFor="rating" className="mb-2 font-semibold">bigger rating</label>
                     <input
                         type="number"
-                        id="bigger-rating"
-                        name="bigger-rating"
+                        id="big_rating"
+                        name="big_rating"
                         min="0.1"
                         max="10"
                         step="0.1"
@@ -147,8 +147,8 @@ export default function Admin() {
                     <label htmlFor="rating" className="mb-2 font-semibold">tiny rating</label>
                     <input
                         type="number"
-                        id="smaller-rating"
-                        name="smaller-rating"
+                        id="small_rating"
+                        name="small_rating"
                         min="0.1"
                         max="10"
                         step="0.1"
