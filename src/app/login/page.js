@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { createClient } from '@supabase/supabase-js'
+import { supabase } from '../../../utils/supabase/client'
 import {useRouter} from "next/navigation";
 
 export default function Login() {
@@ -10,14 +10,9 @@ export default function Login() {
     const [loading, setLoading] = useState(false)
     const router = useRouter()
 
-    const supabase = createClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-    )
-
     const handleLogin = async (e) => {
         e.preventDefault()
-
+        setLoading(true)
         try {
             const { data, error} = await supabase.auth.signInWithPassword({
                 email,
