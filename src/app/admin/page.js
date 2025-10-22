@@ -5,7 +5,7 @@ export const signOut = async() => {
     await supabase.auth.signOut();
 }
 
-export async function addReview() {
+export async function addReview(type, title, biggerRating, smallerRating) {
     const { data: { session }, error: sessionError } = await supabase.auth.getSession();
 
     if (sessionError || !session) {
@@ -21,15 +21,15 @@ export async function addReview() {
         .from("reviews")
         .insert({
             user_id: session.user.id,
-            type: document.getElementById("type").value,
-            title: movie.title,
+            type: type,
+            title: title,
             year: movie.year,
             genre: movie.genre,
             poster_url: movie.poster,
             imdbid: movie.imdbID,
             imdb_rating: movie.imdbRating,
-            my_rating: document.getElementById("bigger-rating").value,
-            wife_rating: document.getElementById("smaller-rating").value,
+            my_rating: biggerRating,
+            wife_rating: smallerRating,
         })
 
     if (error) {
@@ -76,7 +76,18 @@ const getMovieDetailsByTitle = async (title) => {
 export default function Admin() {
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await addReview();
+        try {
+            const formData = new FormData(e.target);
+            const type = formData.get('type');
+            const title = formData.get('title');
+            const biggerRating = formData.get('bigger-rating');
+            const smallerRating = formData.get('smaller-rating');
+
+            await addReview({type, title, biggerRating, smallerRating});
+        } catch (error) {
+            console.error(error);
+            alert(error.message);
+        }
     };
 
     return (
