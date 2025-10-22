@@ -132,7 +132,8 @@ export default function Admin() {
 
     return (
         <div className="min-h-screen font-mono p-8 relative">
-            <Link href="/" className="absolute top-4 left-4 text-base border border-gray-400 rounded px-4 py-2 hover:bg-gray-100 transition-colors">
+            <Link href="/"
+                  className="absolute top-4 left-4 text-base border border-gray-400 rounded px-4 py-2 hover:bg-gray-100 transition-colors">
                 home
             </Link>
 
