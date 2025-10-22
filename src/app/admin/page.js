@@ -16,7 +16,7 @@ export async function addReview({ type, title, biggerRating, smallerRating }) {
     console.log('User ID:', session.user.id);
     console.log('Session:', session);
 
-    const movie = await getMovieDetailsByTitle(title);
+    const movie = await getMovieDetailsByTitleOrId(title);
 
     const yearValue = parseInt(movie.year?.slice(0,4)) || null;
 
@@ -51,6 +51,11 @@ const searchOMDB = async (query) => {
     }
 
     const data = await res.json();
+
+    if (data.error === "Too many results.") {
+        throw new Error("Too many results. Refine search.");
+    }
+
     return data.movies;
 };
 
@@ -66,14 +71,19 @@ const getMovieDetails = async (imdbID) => {
     return data;
 };
 
-const getMovieDetailsByTitle = async (title) => {
-    const movies = await searchOMDB(title);
-    if (!movies || movies.length === 0) {
-        throw new Error("Movie not found");
-    }
+const getMovieDetailsByTitleOrId = async (input) => {
+    const isImdbId = /^tt\d+$/i.test(input.trim());
 
-    const movie = movies[0];
-    return getMovieDetails(movie.imdbID);
+    if (isImdbId) {
+        return getMovieDetails(input);
+    } else {
+        const movies = await searchOMDB(title);
+        if (!movies || movies.length === 0) {
+            throw new Error("Movie not found");
+        }
+        const movie = movies[0];
+        return getMovieDetails(movie.imdbID);
+    }
 }
 
 export default function Admin() {
@@ -87,7 +97,7 @@ export default function Admin() {
         }
 
         try {
-            const movie = await getMovieDetailsByTitle(titleInput);
+            const movie = await getMovieDetailsByTitleOrId(titleInput);
             setFetchedTitle(movie.title);
         } catch (error) {
             console.error(error);
