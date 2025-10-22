@@ -1,12 +1,7 @@
 'use client'
-import { createClient} from "@supabase/supabase-js";
+import { supabase } from '../../../utils/supabase/client'
 
 export const getAuthenticatedUser = async () => {
-    const supabase = createClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-    );
-
     const { data, error } = await supabase.auth.getUser();
 
     if (error) {
@@ -17,32 +12,25 @@ export const getAuthenticatedUser = async () => {
 }
 
 export const signOut = async() => {
-    const supabase = createClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-    );
-
     await supabase.auth.signOut();
 }
 
 export async function addReview() {
-    const user = await getAuthenticatedUser();
+    const { data: { session }, error: sessionError } = await supabase.auth.getSession();
 
-    if (!user) {
-        throw new Error("User not authenticated");
+    if (sessionError || !session) {
+        throw new Error("Session not found");
     }
 
-    const supabase = createClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-    );
+    console.log('User ID:', session.user.id);
+    console.log('Session:', session);
 
     const movie = await getMovieDetailsByTitle(document.getElementById("title").value);
 
     const { data, error } = await supabase
         .from("reviews")
         .insert({
-            user_id: user.id,
+            user_id: session.user.id,
             type: document.getElementById("type").value,
             title: movie.title,
             year: movie.year,
