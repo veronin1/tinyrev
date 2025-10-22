@@ -1,6 +1,7 @@
 'use client'
 import {supabase} from '../../../utils/supabase/client'
 import {useState} from "react";
+import Link from "next/link";
 
 export const signOut = async () => {
     await supabase.auth.signOut();
