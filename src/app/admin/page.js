@@ -5,7 +5,7 @@ export const signOut = async() => {
     await supabase.auth.signOut();
 }
 
-export async function addReview(type, title, biggerRating, smallerRating) {
+export async function addReview({ type, title, biggerRating, smallerRating }) {
     const { data: { session }, error: sessionError } = await supabase.auth.getSession();
 
     if (sessionError || !session) {
