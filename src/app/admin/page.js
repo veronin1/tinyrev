@@ -17,19 +17,21 @@ export async function addReview({ type, title, biggerRating, smallerRating }) {
 
     const movie = await getMovieDetailsByTitle(title);
 
+    const yearValue = parseInt(movie.year?.slice(0,4)) || null;
+
     const { data, error } = await supabase
         .from("reviews")
         .insert([{
             user_id: session.user.id,
             type,
             title: movie.title,
-            year: movie.year,
+            year: yearValue,
             genre: movie.genre,
             poster_url: movie.poster,
             imdbid: movie.imdbID,
             imdb_rating: movie.imdbRating,
-            my_rating: biggerRating,
-            wife_rating: smallerRating,
+            big_rating: biggerRating,
+            tiny_rating: smallerRating,
         }]);
 
     if (error) {
@@ -132,7 +134,7 @@ export default function Admin() {
                         type="number"
                         id="bigger-rating"
                         name="bigger-rating"
-                        min="1"
+                        min="0.1"
                         max="10"
                         step="0.1"
                         required
@@ -147,7 +149,7 @@ export default function Admin() {
                         type="number"
                         id="smaller-rating"
                         name="smaller-rating"
-                        min="1"
+                        min="0.1"
                         max="10"
                         step="0.1"
                         required
