@@ -19,10 +19,10 @@ export async function addReview({ type, title, biggerRating, smallerRating }) {
 
     const { data, error } = await supabase
         .from("reviews")
-        .insert({
+        .insert([{
             user_id: session.user.id,
             type,
-            title,
+            title: movie.title,
             year: movie.year,
             genre: movie.genre,
             poster_url: movie.poster,
@@ -30,7 +30,7 @@ export async function addReview({ type, title, biggerRating, smallerRating }) {
             imdb_rating: movie.imdbRating,
             my_rating: biggerRating,
             wife_rating: smallerRating,
-        })
+        }]);
 
     if (error) {
         throw new Error(error.message);
@@ -84,6 +84,8 @@ export default function Admin() {
             const smallerRating = formData.get('smaller-rating');
 
             await addReview({type, title, biggerRating, smallerRating});
+            alert('Review added successfully');
+            e.target.reset();
         } catch (error) {
             console.error(error);
             alert(error.message);
