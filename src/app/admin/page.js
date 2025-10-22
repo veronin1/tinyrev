@@ -1,5 +1,6 @@
 'use client'
 import { supabase } from '../../../utils/supabase/client'
+import {useState} from "react";
 
 export const signOut = async() => {
     await supabase.auth.signOut();
@@ -76,6 +77,24 @@ const getMovieDetailsByTitle = async (title) => {
 }
 
 export default function Admin() {
+    const [fetchedTitle, setFetchedTitle] = useState("");
+
+    const handleTitleBlur = async (e) => {
+        const titleInput = e.target.value;
+        if (!titleInput) {
+            setFetchedTitle("");
+            return;
+        }
+
+        try {
+            const movie = await getMovieDetailsByTitle(titleInput);
+            setFetchedTitle(movie.title);
+        } catch (error) {
+            console.error(error);
+            setFetchedTitle("");
+        }
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -125,7 +144,11 @@ export default function Admin() {
                         required
                         placeholder="enter title"
                         className="border border-gray-300 rounded p-2"
+                        onBlur={handleTitleBlur}
                     />
+                    {fetchedTitle && (
+                        <p className="text-sm text-gray-600 mt-1">Matched movie: {fetchedTitle}</p>
+                    )}
                 </div>
 
                 <div className="flex flex-col">
