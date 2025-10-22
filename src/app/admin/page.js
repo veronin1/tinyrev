@@ -21,8 +21,8 @@ export async function addReview({ type, title, biggerRating, smallerRating }) {
         .from("reviews")
         .insert({
             user_id: session.user.id,
-            type: type,
-            title: title,
+            type,
+            title,
             year: movie.year,
             genre: movie.genre,
             poster_url: movie.poster,
@@ -129,7 +129,7 @@ export default function Admin() {
                     <input
                         type="number"
                         id="bigger-rating"
-                        name="rating"
+                        name="bigger-rating"
                         min="1"
                         max="10"
                         step="0.1"
@@ -144,7 +144,7 @@ export default function Admin() {
                     <input
                         type="number"
                         id="smaller-rating"
-                        name="rating"
+                        name="smaller-rating"
                         min="1"
                         max="10"
                         step="0.1"
