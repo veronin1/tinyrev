@@ -1,16 +1,6 @@
 'use client'
 import { supabase } from '../../../utils/supabase/client'
 
-export const getAuthenticatedUser = async () => {
-    const { data, error } = await supabase.auth.getUser();
-
-    if (error) {
-        throw new Error(error.message);
-    }
-
-    return data.user;
-}
-
 export const signOut = async() => {
     await supabase.auth.signOut();
 }
