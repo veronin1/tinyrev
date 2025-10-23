@@ -1,30 +1,46 @@
-const getMovie = async(query) => {
-    const apiKey = process.env.OMDB_API_KEY;
-    const params =  {
-        apikey: apiKey,
-        s: query,
-    };
+import {supabase} from '../../../utils/supabase/client'
 
-    const res = await fetch(`https://www.omdbapi.com/?${new URLSearchParams(params)}`);
-
-    if (!res.ok) {
-        throw new Error(`${res.statusText}`);
+const getAllReviews = async () => {
+    const {data, error} = await supabase.from('reviews').select('*');
+    if (error) {
+        throw new Error(error.message);
     }
-
-    return res.json();
-}
-
-const Inception = await getMovie('Inception');
+    return data;
+};
 
 const MovieList = async () => {
+    const reviews = await getAllReviews();
+
     return (
-        <ul>
-            {Inception.Search?.map((movie) => (
-                <li key={movie.imdbID}>
-                    {movie.Title} ({movie.Year})
-                </li>
+        <div className="p-6">
+            <h1 className="text-2xl font-bold mb-4">All Reviews</h1>
+            <table className="min-w-full border border-gray-300 text-left">
+                <thead className="bg-gray-100">
+                <tr>
+                    <th className="border px-4 py-2">Title</th>
+                    <th className="border px-4 py-2">Year</th>
+                    <th className="border px-4 py-2">Genre</th>
+                    <th className="border px-4 py-2">IMDB</th>
+                    <th className="border px-4 py-2">Big</th>
+                    <th className="border px-4 py-2">Tiny</th>
+                    <th className="border px-4 py-2">Avg</th>
+                </tr>
+                </thead>
+                <tbody>
+                {reviews.map((review) => (
+                    <tr key={review.id} className="hover:bg-gray-50">
+                        <td className="border px-4 py-2">{review.title}</td>
+                        <td className="border px-4 py-2">{review.year}</td>
+                        <td className="border px-4 py-2">{review.genre}</td>
+                        <td className="border px-4 py-2">{review.imdb_rating}</td>
+                        <td className="border px-4 py-2">{review.big_rating}</td>
+                        <td className="border px-4 py-2">{review.tiny_rating}</td>
+                        <td className="border px-4 py-2">{review.avg_rating}</td>
+                    </tr>
                 ))}
-        </ul>
+                </tbody>
+            </table>
+        </div>
     );
 };
 
