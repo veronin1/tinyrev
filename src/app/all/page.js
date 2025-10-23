@@ -1,4 +1,6 @@
-import { createClient } from "../../../utils/supabase/server";
+import {createClient} from "../../../utils/supabase/server";
+import Link from "next/link";
+
 const getAllReviews = async () => {
     const supabase = await createClient();
     const {data, error} = await supabase.from('reviews').select('*');
@@ -14,34 +16,100 @@ const MovieList = async () => {
     console.log(reviews);
 
     return (
-        <div className="p-6">
-            <h1 className="text-2xl font-bold mb-4">All Reviews</h1>
-            <table className="min-w-full border border-gray-300 text-left">
-                <thead className="bg-gray-100">
-                <tr>
-                    <th className="border px-4 py-2">Title</th>
-                    <th className="border px-4 py-2">Year</th>
-                    <th className="border px-4 py-2">Genre</th>
-                    <th className="border px-4 py-2">IMDB</th>
-                    <th className="border px-4 py-2">Big</th>
-                    <th className="border px-4 py-2">Tiny</th>
-                    <th className="border px-4 py-2">Avg</th>
-                </tr>
-                </thead>
-                <tbody>
-                {reviews.map((review) => (
-                    <tr key={review.id} className="hover:bg-gray-50">
-                        <td className="border px-4 py-2">{review.title}</td>
-                        <td className="border px-4 py-2">{review.year}</td>
-                        <td className="border px-4 py-2">{review.genre}</td>
-                        <td className="border px-4 py-2">{review.imdb_rating}</td>
-                        <td className="border px-4 py-2">{review.big_rating}</td>
-                        <td className="border px-4 py-2">{review.tiny_rating}</td>
-                        <td className="border px-4 py-2">{review.avg_rating}</td>
-                    </tr>
-                ))}
-                </tbody>
-            </table>
+        <div className="min-h-screen font-mono p-8 relative">
+            <Link
+                href="/"
+                className="absolute top-4 left-4 text-base border border-gray-400 rounded px-4 py-2 hover:bg-gray-100 transition-colors"
+            >
+                home
+            </Link>
+
+            <div className="flex flex-col items-center justify-center min-h-screen text-lg w-full">
+                <div className="text-3xl mb-8 font-semibold">
+                    <p>all reviews</p>
+                </div>
+
+                <div className="overflow-x-auto w-full max-w-5xl">
+                    <table className="min-w-full border border-gray-400 text-left rounded">
+                        <thead className="bg-gray-100">
+                        <tr>
+                            <th className="border border-gray-300 px-4 py-2">Title</th>
+                            <th className="border border-gray-300 px-4 py-2">Year</th>
+                            <th className="border border-gray-300 px-4 py-2">Genre</th>
+                            <th className="border border-gray-300 px-4 py-2">IMDB</th>
+                            <th className="border border-gray-300 px-4 py-2">Big</th>
+                            <th className="border border-gray-300 px-4 py-2">Tiny</th>
+                            <th className="border border-gray-300 px-4 py-2">Average</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {reviews.length > 0 ? (
+                            reviews.map((review) => (
+                                <tr
+                                    key={review.created_at}
+                                    className="hover:bg-gray-50 transition-colors"
+                                >
+                                    <td className="border border-gray-300 px-4 py-2 flex items-center gap-3">
+                                        {review.poster_url && (
+                                            <img
+                                                src={review.poster_url}
+                                                alt={`${review.title} poster`}
+                                                className="w-10 h-14 object-cover rounded shadow-sm"
+                                            />
+                                        )}
+                                        <span className="font-medium">{review.title}</span>
+                                    </td>
+                                    <td className="border border-gray-300 px-4 py-2">
+                                        {review.year}
+                                    </td>
+                                    <td className="border border-gray-300 px-4 py-2">
+                                        {review.genre}
+                                    </td>
+                                    <td className="border border-gray-300 px-4 py-2">
+                                        {review.imdb_rating}
+                                    </td>
+                                    <td className="border border-gray-300 px-4 py-2">
+                                        {review.big_rating}
+                                    </td>
+                                    <td className="border border-gray-300 px-4 py-2">
+                                        {review.tiny_rating}
+                                    </td>
+                                    <td className="border border-gray-300 px-4 py-2">
+                                        {review.avg_rating?.toFixed?.(1) || "-"}
+                                    </td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td
+                                    colSpan={7}
+                                    className="text-center border border-gray-300 px-4 py-6 text-gray-500"
+                                >
+                                    no reviews found
+                                </td>
+                            </tr>
+                        )}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div className="footer mt-8">
+                    <ul className="flex gap-4 text-base">
+                        <li>
+                            <Link href="/all" className="hover:underline">all</Link>
+                        </li>
+                        <li>
+                            <Link href="/movies" className="hover:underline">movies</Link>
+                        </li>
+                        <li>
+                            <Link href="/television" className="hover:underline">television</Link>
+                        </li>
+                        <li>
+                            <Link href="/games" className="hover:underline">games</Link>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
     );
 };
