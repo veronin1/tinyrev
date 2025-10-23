@@ -4,7 +4,7 @@ import Image from "next/image";
 
 const getAllReviews = async () => {
     const supabase = await createClient();
-    const {data, error} = await supabase.from('reviews').select('*');
+    const {data, error} = await supabase.from('reviews').select('*').order("created_at", {ascending: false});
     if (error) {
         throw new Error(error.message);
     }
@@ -47,7 +47,7 @@ const MovieList = async () => {
                         {reviews.length > 0 ? (
                             reviews.map((review) => (
                                 <tr
-                                    key={review.uuid}
+                                    key={review.id}
                                     className="hover:bg-gray-50 transition-colors"
                                 >
                                     <td className="border border-gray-300 px-4 py-2 flex items-center gap-3">
