@@ -1,6 +1,6 @@
-import {supabase} from '../../../utils/supabase/client'
-
+import { createClient } from "../../../utils/supabase/server";
 const getAllReviews = async () => {
+    const supabase = await createClient();
     const {data, error} = await supabase.from('reviews').select('*');
     if (error) {
         throw new Error(error.message);
@@ -10,6 +10,8 @@ const getAllReviews = async () => {
 
 const MovieList = async () => {
     const reviews = await getAllReviews();
+
+    console.log(reviews);
 
     return (
         <div className="p-6">
