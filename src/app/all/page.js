@@ -1,5 +1,6 @@
 import {createClient} from "../../../utils/supabase/server";
 import Link from "next/link";
+import Image from "next/image";
 
 const getAllReviews = async () => {
     const supabase = await createClient();
@@ -46,16 +47,20 @@ const MovieList = async () => {
                         {reviews.length > 0 ? (
                             reviews.map((review) => (
                                 <tr
-                                    key={review.created_at}
+                                    key={review.uuid}
                                     className="hover:bg-gray-50 transition-colors"
                                 >
                                     <td className="border border-gray-300 px-4 py-2 flex items-center gap-3">
                                         {review.poster_url && (
-                                            <img
-                                                src={review.poster_url}
-                                                alt={`${review.title} poster`}
-                                                className="w-10 h-14 object-cover rounded shadow-sm"
-                                            />
+                                            <div className="relative w-10 h-14 flex-shrink-0">
+                                                <Image
+                                                    src={review.poster_url}
+                                                    alt={`${review.title} poster`}
+                                                    fill
+                                                    className="object-cover rounded shadow-sm"
+                                                    sizes="40px"
+                                                />
+                                            </div>
                                         )}
                                         <span className="font-medium">{review.title}</span>
                                     </td>
