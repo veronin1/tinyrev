@@ -2,24 +2,24 @@ import {createClient} from "../../../utils/supabase/server";
 import Link from "next/link";
 import Image from "next/image";
 
-const getSeriesReviews = async () => {
+const getGameReviews = async () => {
     const supabase = await createClient();
-    const {data, error} = await supabase.from('reviews').select('*').order("created_at", {ascending: false}).eq('type', 'series');
+    const {data, error} = await supabase.from('reviews').select('*').order("created_at", {ascending: false}).eq('type', 'game');
     if (error) {
         throw new Error(error.message);
     }
     return data;
 };
 
-const SeriesReviewList = async () => {
-    const reviews = await getSeriesReviews();
+const GameReviewList = async () => {
+    const reviews = await getGameReviews();
 
     console.log(reviews);
 
     return (
         <div className="min-h-screen font-mono p-8 relative">
             <Link
-                href="/public"
+                href="/"
                 className="absolute top-4 left-4 text-base border border-gray-400 rounded px-4 py-2 hover:bg-gray-100 transition-colors"
             >
                 home
@@ -27,7 +27,7 @@ const SeriesReviewList = async () => {
 
             <div className="flex flex-col items-center justify-center min-h-screen text-lg w-full">
                 <div className="text-3xl mb-8 font-semibold">
-                    <p>series reviews</p>
+                    <p>game reviews</p>
                 </div>
 
                 <div className="overflow-x-auto w-full max-w-5xl">
@@ -37,7 +37,6 @@ const SeriesReviewList = async () => {
                             <th className="border border-gray-300 px-4 py-2">Title</th>
                             <th className="border border-gray-300 px-4 py-2">Year</th>
                             <th className="border border-gray-300 px-4 py-2">Genre</th>
-                            <th className="border border-gray-300 px-4 py-2">IMDB</th>
                             <th className="border border-gray-300 px-4 py-2">Big</th>
                             <th className="border border-gray-300 px-4 py-2">Tiny</th>
                             <th className="border border-gray-300 px-4 py-2">Average</th>
@@ -69,9 +68,6 @@ const SeriesReviewList = async () => {
                                     </td>
                                     <td className="border border-gray-300 px-4 py-2">
                                         {review.genre}
-                                    </td>
-                                    <td className="border border-gray-300 px-4 py-2">
-                                        {review.imdb_rating}
                                     </td>
                                     <td className="border border-gray-300 px-4 py-2">
                                         {review.big_rating}
@@ -119,4 +115,4 @@ const SeriesReviewList = async () => {
     );
 };
 
-export default SeriesReviewList;
+export default GameReviewList;
