@@ -4,7 +4,7 @@ import Image from "next/image";
 
 const getSeriesReviews = async () => {
     const supabase = await createClient();
-    const {data, error} = await supabase.from('reviews').select('*').order("created_at", {ascending: false}).eq('review_type', 'series');
+    const {data, error} = await supabase.from('reviews').select('*').order("created_at", {ascending: false}).eq('type', 'series');
     if (error) {
         throw new Error(error.message);
     }
@@ -19,7 +19,7 @@ const SeriesReviewList = async () => {
     return (
         <div className="min-h-screen font-mono p-8 relative">
             <Link
-                href="/"
+                href="/public"
                 className="absolute top-4 left-4 text-base border border-gray-400 rounded px-4 py-2 hover:bg-gray-100 transition-colors"
             >
                 home
