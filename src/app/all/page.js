@@ -11,7 +11,7 @@ const getAllReviews = async () => {
     return data;
 };
 
-const MovieList = async () => {
+const AllReviewList = async () => {
     const reviews = await getAllReviews();
 
     console.log(reviews);
@@ -119,4 +119,4 @@ const MovieList = async () => {
     );
 };
 
-export default MovieList;
+export default AllReviewList;
