@@ -2,17 +2,17 @@ import {createClient} from "../../../utils/supabase/server";
 import Link from "next/link";
 import Image from "next/image";
 
-const getAllReviews = async () => {
+const getMovieReviews = async () => {
     const supabase = await createClient();
-    const {data, error} = await supabase.from('reviews').select('*').order("created_at", {ascending: false});
+    const {data, error} = await supabase.from('reviews').select('*').order("created_at", {ascending: false}).eq('type', 'movie');
     if (error) {
         throw new Error(error.message);
     }
     return data;
 };
 
-const AllReviewList = async () => {
-    const reviews = await getAllReviews();
+const MovieReviewList = async () => {
+    const reviews = await getMovieReviews();
 
     console.log(reviews);
 
@@ -119,4 +119,4 @@ const AllReviewList = async () => {
     );
 };
 
-export default AllReviewList;
+export default MovieReviewList;
