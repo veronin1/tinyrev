@@ -107,7 +107,7 @@ const AllReviewList = async () => {
                             <Link href="/movies" className="hover:underline">movies</Link>
                         </li>
                         <li>
-                            <Link href="/television" className="hover:underline">series</Link>
+                            <Link href="/series" className="hover:underline">series</Link>
                         </li>
                         <li>
                             <Link href="/games" className="hover:underline">games</Link>
