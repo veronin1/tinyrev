@@ -27,7 +27,7 @@ const MovieReviewList = async () => {
 
             <div className="flex flex-col items-center justify-center min-h-screen text-lg w-full">
                 <div className="text-3xl mb-8 font-semibold">
-                    <p>all reviews</p>
+                    <p>movie reviews</p>
                 </div>
 
                 <div className="overflow-x-auto w-full max-w-5xl">
