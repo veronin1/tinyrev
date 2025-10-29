@@ -26,16 +26,16 @@ export default function Home() {
                 <div className="footer mt-8">
                     <ul className="flex gap-4">
                         <li>
-                            <Link href="/all" className="hover:underline">all</Link>
+                            <Link href="/reviews/all" className="hover:underline">all</Link>
                         </li>
                         <li>
-                            <Link href="/movies" className="hover:underline">movies</Link>
+                            <Link href="/reviews/movies" className="hover:underline">movies</Link>
                         </li>
                         <li>
-                            <Link href="/series" className="hover:underline">series</Link>
+                            <Link href="/reviews/series" className="hover:underline">series</Link>
                         </li>
                         <li>
-                            <Link href="/games" className="hover:underline">games</Link>
+                            <Link href="/reviews/games" className="hover:underline">games</Link>
                         </li>
                     </ul>
                 </div>
