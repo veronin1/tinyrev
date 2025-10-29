@@ -4,7 +4,11 @@ import Image from "next/image";
 
 const getAllReviews = async () => {
     const supabase = await createClient();
-    const {data, error} = await supabase.from('reviews').select('*').order("created_at", {ascending: false});
+    const { data, error } = await supabase
+        .from("reviews")
+        .select("id, title, genre, imdb_rating, big_rating, tiny_rating, avg_rating, poster_url, year, created_at, type")
+        .order("created_at", { ascending: false });
+
     if (error) {
         throw new Error(error.message);
     }
@@ -29,7 +33,6 @@ const AllReviewList = async () => {
                 <div className="text-3xl mb-8 font-semibold">
                     <p>all reviews</p>
                 </div>
-
                 <div className="overflow-x-auto w-full max-w-5xl">
                     <table className="min-w-full border border-gray-400 text-left rounded">
                         <thead className="bg-gray-100">
@@ -43,6 +46,7 @@ const AllReviewList = async () => {
                             <th className="border border-gray-300 px-4 py-2">Average</th>
                         </tr>
                         </thead>
+
                         <tbody>
                         {reviews.length > 0 ? (
                             reviews.map((review) => (
@@ -64,6 +68,7 @@ const AllReviewList = async () => {
                                         )}
                                         <span className="font-medium">{review.title}</span>
                                     </td>
+
                                     <td className="border border-gray-300 px-4 py-2">
                                         {review.year}
                                     </td>
@@ -101,16 +106,24 @@ const AllReviewList = async () => {
                 <div className="footer mt-8">
                     <ul className="flex gap-4 text-base">
                         <li>
-                            <Link href="/all" className="hover:underline">all</Link>
+                            <Link href="/all" className="hover:underline">
+                                all
+                            </Link>
                         </li>
                         <li>
-                            <Link href="/movies" className="hover:underline">movies</Link>
+                            <Link href="/movies" className="hover:underline">
+                                movies
+                            </Link>
                         </li>
                         <li>
-                            <Link href="/series" className="hover:underline">series</Link>
+                            <Link href="/series" className="hover:underline">
+                                series
+                            </Link>
                         </li>
                         <li>
-                            <Link href="/games" className="hover:underline">games</Link>
+                            <Link href="/games" className="hover:underline">
+                                games
+                            </Link>
                         </li>
                     </ul>
                 </div>
