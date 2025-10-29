@@ -1,15 +1,15 @@
 import Link from "next/link";
-import { fetchReviews } from "../../../utils/supabase/fetchReviews";
-import ReviewList from "../../../components/ReviewTable";
+import { fetchReviews } from "../../../../utils/supabase/fetchReviews";
+import ReviewTable from "../../../components/ReviewTable";
 import Footer from "../../../components/Footer";
 
 export default async function Reviews({ params }) {
     const { type } = params;
 
     const dbType =
-        type === 'movies' ? 'movie' :
-        type === 'series' ? 'series' :
-        null;
+        type === "movies" ? "movie" :
+            type === "series" ? "series" :
+                null;
 
     const reviews = await fetchReviews(dbType);
 
@@ -22,15 +22,15 @@ export default async function Reviews({ params }) {
                 home
             </Link>
 
-            <div className = "flex flex-col items-center justify-center min-h-screen text-lg w-full">
+            <div className="flex flex-col items-center justify-center min-h-screen text-lg w-full">
                 <div className="text-3xl mb-8 font-semibold">
-                    <p>{type} reviews</p>
+                    <p>{type === "all" ? "all reviews" : `${type} reviews`}</p>
                 </div>
+
+                <ReviewTable reviews={reviews} />
+
+                <Footer />
             </div>
-
-            <ReviewList reviews={reviews} />
-
-            <Footer />
         </div>
-    )
+    );
 }
