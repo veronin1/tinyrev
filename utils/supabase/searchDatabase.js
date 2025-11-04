@@ -1,8 +1,6 @@
-import {createClient} from "./server";
+import {supabase} from "./client";
 
 export const searchDatabase = async (query) => {
-    const supabase = await createClient();
-
     const {data, error} = await supabase.from('reviews').select('*').ilike('title', `%${query}%`);
 
     if (error) {
