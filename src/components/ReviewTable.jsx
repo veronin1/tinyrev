@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function ReviewTable({ reviews }) {
     if (!reviews?.length) {
@@ -45,16 +46,23 @@ export default function ReviewTable({ reviews }) {
                             <div className="flex items-center gap-3">
                                 {r.poster_url && (
                                     <div className="relative w-8 h-12 flex-shrink-0 overflow-hidden rounded-sm border border-neutral-200">
-                                        <Image
-                                            src={r.poster_url}
-                                            alt={`${r.title} poster`}
-                                            fill
-                                            className="object-cover"
-                                            sizes="40px"
-                                        />
+                                        <Link href={`/reviews/${r.id}`}>
+                                            <Image
+                                                src={r.poster_url}
+                                                alt={`${r.title} poster`}
+                                                fill
+                                                className="object-cover"
+                                                sizes="40px"
+                                            />
+                                        </Link>
                                     </div>
                                 )}
-                                <span className="font-normal">{r.title}</span>
+                                <Link
+                                    href={`/reviews/${r.id}`}
+                                    className="font-normal hover:text-[var(--accent)] transition"
+                                >
+                                    {r.title}
+                                </Link>
                             </div>
                         </td>
                         <td className="border border-neutral-200 px-3 py-2">{r.year}</td>
