@@ -175,6 +175,22 @@ export default function Admin() {
                         )}
                     </div>
 
+                    {selectedType === 'series' && (
+                        <div className="flex flex-col">
+                            <label htmlFor="season" className="mb-2 font-semibold">season</label>
+                            <input
+                                type="number"
+                                id="season"
+                                name="season"
+                                min="1"
+                                max="100"
+                                required
+                                placeholder="1"
+                                className="border border-gray-300 rounded p-2"
+                            />
+                        </div>
+                    )}
+
                     <div className="flex flex-col">
                         <label htmlFor="rating" className="mb-2 font-semibold">bigger rating</label>
                         <input
