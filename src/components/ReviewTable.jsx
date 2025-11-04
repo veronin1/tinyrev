@@ -61,10 +61,13 @@ export default function ReviewTable({ reviews }) {
                                     href={`/reviews/${r.id}`}
                                     className="font-normal hover:text-[var(--accent)] transition"
                                 >
-                                    {r.title}
+                                    {r.type === "series"
+                                        ? `${r.title} (Season ${r.season})`
+                                        : r.title}
                                 </Link>
                             </div>
                         </td>
+
                         <td className="border border-neutral-200 px-3 py-2">{r.year}</td>
                         <td className="border border-neutral-200 px-3 py-2">{r.genre}</td>
                         <td className="border border-neutral-200 px-3 py-2">{r.imdb_rating}</td>
