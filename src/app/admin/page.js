@@ -7,7 +7,7 @@ export const signOut = async () => {
     await supabase.auth.signOut();
 }
 
-export async function addReview({type, title, biggerRating, smallerRating}) {
+export async function addReview({type, title, biggerRating, smallerRating, season}) {
     const {data: {session}, error: sessionError} = await supabase.auth.getSession();
 
     if (sessionError || !session) {
@@ -17,7 +17,18 @@ export async function addReview({type, title, biggerRating, smallerRating}) {
     console.log('User ID:', session.user.id);
     console.log('Session:', session);
 
-    const movie = await getMovieDetailsByTitleOrId(title);
+    let seasonNumber = null;
+    if (type === 'series' && season) {
+        if (!season) {
+            throw new Error("Season is required for series");
+        }
+        seasonNumber = parseInt(season, 10);
+        if (isNaN(seasonNumber) || seasonNumber < 1 || seasonNumber > 100) {
+            throw new Error("Invalid season number");
+        }
+    }
+
+    const movie = await getMovieDetailsByTitleOrId(title, seasonNumber);
 
     const yearValue = parseInt(movie.year?.slice(0, 4)) || null;
 
@@ -34,6 +45,7 @@ export async function addReview({type, title, biggerRating, smallerRating}) {
             imdb_rating: movie.imdbRating,
             big_rating: biggerRating,
             tiny_rating: smallerRating,
+            season: seasonNumber,
         }]);
 
     if (error) {
@@ -71,13 +83,14 @@ const getMovieDetails = async (imdbID) => {
     return await res.json();
 };
 
-const getMovieDetailsByTitleOrId = async (input) => {
+const getMovieDetailsByTitleOrId = async (input, season = null) => {
     input = input.trim();
 
     const isImdbId = /^tt\d+$/i.test(input);
 
     if (isImdbId) {
-        return getMovieDetails(input);
+        const params = season ? `?season=${season}` : '';
+        return getMovieDetails(input + params);
     } else {
         const movies = await searchOMDB(input);
         if (!movies || movies.length === 0) {
@@ -116,8 +129,9 @@ export default function Admin() {
             const title = formData.get('title');
             const biggerRating = formData.get('big_rating');
             const smallerRating = formData.get('small_rating');
+            const season = formData.get('season');
 
-            await addReview({type, title, biggerRating, smallerRating});
+            await addReview({type, title, biggerRating, smallerRating, season});
             alert('Review added successfully');
             e.target.reset();
         } catch (error) {
@@ -186,6 +200,7 @@ export default function Admin() {
                                 max="100"
                                 required
                                 placeholder="1"
+                                defaultValue="1"
                                 className="border border-gray-300 rounded p-2"
                             />
                         </div>
