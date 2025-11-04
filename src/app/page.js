@@ -7,11 +7,22 @@ import {searchDatabase} from "../../utils/supabase/searchDatabase";
 export default function Home() {
     const [query, setQuery] = useState("");
 
-    async function handleSearch(e) {
-        const q = e.target.value;
-        setQuery(q);
-
+    async function handleSearch() {
+        if (!query.trim()) return;
         const searchResults = await searchDatabase(query);
+
+        if (searchResults && searchResults.length > 0) {
+            console.log(">>>", searchResults);
+        } else {
+            alert("No results found");
+        }
+
+    }
+
+    function handleKeyDown(e) {
+        if (e.key === "Enter") {
+            handleSearch().catch(console.error);
+        }
     }
 
     return (
@@ -33,7 +44,8 @@ export default function Home() {
                 className="mt-8 border border-neutral-300 bg-white px-4 py-2 w-72 rounded-md text-center focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition-all"
                 id="search"
                 value={query}
-                onChange={handleSearch}
+                onChange={(e) => setQuery(e.target.value)}
+                onKeyDown={handleKeyDown}
             />
 
             <ul className="flex gap-8 mt-10 text-sm uppercase text-neutral-600">
