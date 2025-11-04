@@ -3,16 +3,18 @@
 import {useState} from "react";
 import Link from "next/link";
 import {searchDatabase} from "../../utils/supabase/searchDatabase";
+import {useRouter} from "next/navigation";
 
 export default function Home() {
     const [query, setQuery] = useState("");
+    const router = useRouter();
 
     async function handleSearch() {
         if (!query.trim()) return;
         const searchResults = await searchDatabase(query);
 
         if (searchResults && searchResults.length > 0) {
-            console.log(">>>", searchResults);
+            router.push(`/reviews/${searchResults[0].id}`);
         } else {
             alert("No results found");
         }
