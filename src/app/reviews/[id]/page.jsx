@@ -39,7 +39,9 @@ export default async function ReviewPage({ params }) {
                 />
 
                 <h1 className="text-3xl font-semibold mb-4 font-mono text-[var(--accent)] text-center">
-                    {review.title}
+                    {review.type === "series"
+                        ? `${review.title} (Season ${review.season})`
+                        : review.title}
                 </h1>
 
                 <div className="grid grid-cols-2 gap-4 w-full mb-4">
@@ -49,8 +51,12 @@ export default async function ReviewPage({ params }) {
                     <p className="font-semibold">Genre:</p>
                     <p className="text-right">{review.genre}</p>
 
-                    <p className="font-semibold">IMDB Rating:</p>
-                    <p className="text-right">{review.imdb_rating}</p>
+                    {review.type !== "series" && (
+                        <>
+                            <p className="font-semibold">IMDB Rating:</p>
+                            <p className="text-right">{review.imdb_rating}</p>
+                        </>
+                    )}
 
                     <p className="font-semibold">Big Rating:</p>
                     <p className="text-right text-[var(--accent)] font-semibold">{review.big_rating}</p>
