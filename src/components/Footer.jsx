@@ -7,7 +7,7 @@ export default function Footer() {
                 {["all", "movies", "series", "games"].map((x) => (
                     <li key={x}>
                         <Link
-                            href={`/reviews/${x}`}
+                            href={`/reviews/type/${x}`}
                             className="hover:text-[var(--accent)] transition"
                         >
                             {x}
