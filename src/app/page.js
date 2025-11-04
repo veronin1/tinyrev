@@ -14,7 +14,10 @@ export default function Home() {
         const searchResults = await searchDatabase(query);
 
         if (searchResults && searchResults.length > 0) {
-            router.push(`/reviews/${searchResults[0].id}`);
+            router.push({
+                pathname: `/reviews/${searchResults[0].id}`,
+                query: { data: JSON.stringify(searchResults[0]) }
+            });
         } else {
             alert("No results found");
         }
