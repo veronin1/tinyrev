@@ -14,10 +14,7 @@ export default function Home() {
         const searchResults = await searchDatabase(query);
 
         if (searchResults && searchResults.length > 0) {
-            router.push({
-                pathname: `/reviews/${searchResults[0].id}`,
-                query: { data: JSON.stringify(searchResults[0]) }
-            });
+            router.push(`/reviews/${searchResults[0].id}`);
         } else {
             alert("No results found");
         }
@@ -56,7 +53,7 @@ export default function Home() {
             <ul className="flex gap-8 mt-10 text-sm uppercase text-neutral-600">
                 {["all", "movies", "series", "games"].map((x) => (
                     <li key={x}>
-                        <Link href={`/reviews/${x}`} className="hover:text-[var(--accent)]">
+                        <Link href={`/reviews/type/${x}`} className="hover:text-[var(--accent)]">
                             {x}
                         </Link>
                     </li>
