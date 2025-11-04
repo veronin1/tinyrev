@@ -1,6 +1,32 @@
+'use client'
+
+import {useState} from "react";
 import Link from "next/link";
+import {searchDatabase} from "../../utils/supabase/searchDatabase";
+import {useRouter} from "next/navigation";
 
 export default function Home() {
+    const [query, setQuery] = useState("");
+    const router = useRouter();
+
+    async function handleSearch() {
+        if (!query.trim()) return;
+        const searchResults = await searchDatabase(query);
+
+        if (searchResults && searchResults.length > 0) {
+            router.push(`/reviews/${searchResults[0].id}`);
+        } else {
+            alert("No results found");
+        }
+
+    }
+
+    function handleKeyDown(e) {
+        if (e.key === "Enter") {
+            handleSearch().catch(console.error);
+        }
+    }
+
     return (
         <main className="flex flex-col items-center justify-center flex-1 px-6 py-20 text-center">
             <Link
@@ -18,12 +44,16 @@ export default function Home() {
                 type="search"
                 placeholder="search..."
                 className="mt-8 border border-neutral-300 bg-white px-4 py-2 w-72 rounded-md text-center focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition-all"
+                id="search"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                onKeyDown={handleKeyDown}
             />
 
             <ul className="flex gap-8 mt-10 text-sm uppercase text-neutral-600">
                 {["all", "movies", "series", "games"].map((x) => (
                     <li key={x}>
-                        <Link href={`/reviews/${x}`} className="hover:text-[var(--accent)]">
+                        <Link href={`/reviews/type/${x}`} className="hover:text-[var(--accent)]">
                             {x}
                         </Link>
                     </li>

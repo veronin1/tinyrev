@@ -1,10 +1,10 @@
 import Link from "next/link";
-import { fetchReviews } from "../../../../utils/supabase/fetchReviews";
-import ReviewTable from "../../../components/ReviewTable";
-import Footer from "../../../components/Footer";
+import { fetchReviews } from "../../../../../utils/supabase/fetchReviews";
+import ReviewTable from "../../../../components/ReviewTable";
+import Footer from "../../../../components/Footer";
 
 export default async function Reviews({ params }) {
-    const { type } = params;
+    const { type } = await params;
     const dbType =
         type === "movies" ? "movie" :
             type === "series" ? "series" : null;
