@@ -13,7 +13,7 @@ export default async function Reviews({ params }) {
     return (
         <main className="flex flex-col items-center flex-1 px-6 py-12 bg-neutral-50 text-neutral-900">
             <Link
-                href="/public"
+                href="/"
                 className="absolute top-6 left-6 text-sm border border-neutral-300 rounded px-3 py-1.5 hover:bg-neutral-100 transition-colors"
             >
                 home
