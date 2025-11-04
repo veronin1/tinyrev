@@ -13,9 +13,11 @@ export async function GET(request) {
 
     try {
         if (imdbID) {
+            const season = searchParams.get('season');
             const params = new URLSearchParams({
                 apikey: apiKey,
                 i: imdbID,
+                ...(season ? { Season: season } : {})
             });
 
             const res = await fetch(`https://www.omdbapi.com/?${params}`);
@@ -32,6 +34,7 @@ export async function GET(request) {
                 poster: data.Poster,
                 imdbRating: data.imdbRating,
                 imdbID: data.imdbID,
+                season: season ? parseInt(season, 10) : null,
             });
         } else if (title) {
             const params = new URLSearchParams({
