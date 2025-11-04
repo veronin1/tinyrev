@@ -86,19 +86,32 @@ const getMovieDetails = async (imdbID) => {
 const getMovieDetailsByTitleOrId = async (input, season = null) => {
     input = input.trim();
 
+    let imdbID;
     const isImdbId = /^tt\d+$/i.test(input);
 
     if (isImdbId) {
-        const params = season ? `?season=${season}` : '';
-        return getMovieDetails(input + params);
+        imdbID = input;
     } else {
         const movies = await searchOMDB(input);
         if (!movies || movies.length === 0) {
             throw new Error("Movie not found");
         }
-        const movie = movies[0];
-        return getMovieDetails(movie.imdbID);
+        imdbID = movies[0].imdbID;
     }
+
+    const params = new URLSearchParams({apikey: process.env.NEXT_PUBLIC_OMDB_API_KEY, i: imdbID});
+    if (season) {
+        params.append('Season', season);
+    }
+
+    const res = await fetch(`/api/omdb?${params.toString()}`);
+    const data = await res.json();
+
+    if (data.Response === "False") {
+        throw new Error(data.Error);
+    }
+
+    return data;
 }
 
 export default function Admin() {
