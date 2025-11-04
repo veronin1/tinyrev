@@ -9,7 +9,6 @@ export const fetchReviewById = async (id) => {
 
     if (error) {
         throw new Error(error.message);
-        return null;
     }
 
     return data;
