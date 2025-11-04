@@ -5,7 +5,7 @@ export default function Home() {
         <main className="flex flex-col items-center justify-center flex-1 px-6 py-20 text-center">
             <Link
                 href="/login"
-                className="absolute top-6 left-6 text-sm border border-neutral-300 px-3 py-1 rounded-md hover:bg-neutral-100 transition-colors"
+                className="absolute top-6 left-6 text-sm border border-neutral-300 rounded px-3 py-1.5 hover:bg-neutral-100 transition-colors"
             >
                 login
             </Link>
