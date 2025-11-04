@@ -2,44 +2,33 @@ import Link from "next/link";
 
 export default function Home() {
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen font-mono text-3xl">
+        <main className="flex flex-col items-center justify-center flex-1 px-6 py-20 text-center">
             <Link
                 href="/login"
-                className="absolute top-4 left-4 text-base border border-gray-400 rounded px-4 py-2 hover:bg-gray-100 transition-colors"
+                className="absolute top-6 left-6 text-sm border border-neutral-300 px-3 py-1 rounded-md hover:bg-neutral-100 transition-colors"
             >
                 login
             </Link>
 
-            <div className="flex flex-col items-center justify-center min-h-screen font-mono text-3xl">
-                <div>
-                    <Link href="/" className="hover:underline">tinyrev</Link>
-                </div>
+            <h1 className="text-6xl font-semibold tracking-tight font-mono">
+                tiny<span className="text-[var(--accent)]">rev</span>
+            </h1>
 
-                <div className="search mt-4">
-                    <input
-                        type="search"
-                        placeholder="Search..."
-                        className="border border-gray-400 rounded p-2 text-lg"
-                    />
-                </div>
+            <input
+                type="search"
+                placeholder="search..."
+                className="mt-8 border border-neutral-300 bg-white px-4 py-2 w-72 rounded-md text-center focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition-all"
+            />
 
-                <div className="footer mt-8">
-                    <ul className="flex gap-4">
-                        <li>
-                            <Link href="/reviews/all" className="hover:underline">all</Link>
-                        </li>
-                        <li>
-                            <Link href="/reviews/movies" className="hover:underline">movies</Link>
-                        </li>
-                        <li>
-                            <Link href="/reviews/series" className="hover:underline">series</Link>
-                        </li>
-                        <li>
-                            <Link href="/reviews/games" className="hover:underline">games</Link>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+            <ul className="flex gap-8 mt-10 text-sm uppercase text-neutral-600">
+                {["all", "movies", "series", "games"].map((x) => (
+                    <li key={x}>
+                        <Link href={`/reviews/${x}`} className="hover:text-[var(--accent)]">
+                            {x}
+                        </Link>
+                    </li>
+                ))}
+            </ul>
+        </main>
     );
 }
