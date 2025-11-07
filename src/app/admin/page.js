@@ -55,36 +55,19 @@ export async function addReview({type, title, biggerRating, smallerRating, seaso
     return data;
 }
 
-const searchOMDB = async (query) => {
-    const res = await fetch(`/api/omdb?title=${encodeURIComponent(query)}`);
-
-    if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.error || res.statusText);
-    }
-
-    const data = await res.json();
-
-    if (data.error === "Too many results.") {
-        throw new Error("Too many results. Refine search.");
-    }
-
-    return data.movies;
-};
-
 const getMovieDetailsByTitleOrId = async (input, season = null) => {
     input = input.trim();
     if (!input) throw new Error("Title or IMDB ID is required");
 
     let url;
 
-    // Check if input is an IMDB ID
+    // check if input is an IMDB ID through regex
     if (/^tt\d+$/i.test(input)) {
         const params = new URLSearchParams({ i: input });
         if (season) params.append('season', season);
         url = `/api/omdb?${params.toString()}`;
     } else {
-        // Title search
+        // title search
         url = `/api/omdb?title=${encodeURIComponent(input)}`;
     }
 
