@@ -30,10 +30,8 @@ export default function Login() {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen font-mono p-8">
-            <div className="text-3xl mb-8">
-                <p>tinyrev login</p>
-            </div>
+        <main className="flex flex-col items-center justify-center min-h-screen px-6 py-12 bg-neutral-50 text-neutral-900 font-mono">
+            <h1 className="text-3xl font-semibold mb-8">tiny<span className="text-[var(--accent)]">rev</span> login</h1>
 
             <form onSubmit={handleLogin} className="flex flex-col gap-4 w-full max-w-md">
                 {error && (
@@ -43,7 +41,7 @@ export default function Login() {
                 )}
 
                 <div className="flex flex-col">
-                    <label htmlFor="email" className="mb-2 font-semibold">email</label>
+                    <label htmlFor="email" className="mb-1 font-semibold">email</label>
                     <input
                         type="email"
                         id="email"
@@ -51,13 +49,13 @@ export default function Login() {
                         onChange={(e) => setEmail(e.target.value)}
                         required
                         placeholder="bingles@bootdog.com"
-                        className="border border-gray-300 rounded p-2"
+                        className="border border-neutral-300 rounded p-2 focus:outline-none focus:ring-2 focus:ring-[var(--accent)]"
                         disabled={loading}
                     />
                 </div>
 
                 <div className="flex flex-col">
-                    <label htmlFor="password" className="mb-2 font-semibold">password</label>
+                    <label htmlFor="password" className="mb-1 font-semibold">password</label>
                     <input
                         type="password"
                         id="password"
@@ -65,7 +63,7 @@ export default function Login() {
                         onChange={(e) => setPassword(e.target.value)}
                         required
                         placeholder="••••••••"
-                        className="border border-gray-300 rounded p-2"
+                        className="border border-neutral-300 rounded p-2 focus:outline-none focus:ring-2 focus:ring-[var(--accent)]"
                         disabled={loading}
                     />
                 </div>
@@ -78,6 +76,6 @@ export default function Login() {
                     {loading ? 'logging in...' : 'login'}
                 </button>
             </form>
-        </div>
+        </main>
     );
 }
