@@ -62,7 +62,7 @@ export default function Home() {
                         <li key={r.id}>
                             <button
                                 onClick={() => router.push(`/reviews/${r.id}`)}
-                                className="text-blue-600 hover:underline"
+                                className="text-blue-600 hover:underline cursor-pointer"
                             >
                                 {r.title}
                                 {r.season && ` (Season ${r.season})`}
@@ -72,7 +72,6 @@ export default function Home() {
                     ))}
                 </ul>
             )}
-
 
             <ul className="flex gap-8 mt-10 text-sm uppercase text-neutral-600">
                 {["all", "movies", "series", "games"].map((x) => (
