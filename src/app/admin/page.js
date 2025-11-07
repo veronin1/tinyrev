@@ -156,112 +156,109 @@ export default function Admin() {
     }
 
     return (
-        <div className="min-h-screen font-mono p-8 relative">
-            <Link href="/"
-                  className="absolute top-4 left-4 text-base border border-gray-400 rounded px-4 py-2 hover:bg-gray-100 transition-colors">
+        <main className="flex flex-col items-center flex-1 px-6 py-12 bg-neutral-50 text-neutral-900 font-mono min-h-screen">
+            <Link
+                href="/"
+                className="absolute top-6 left-6 text-sm border border-neutral-300 rounded px-3 py-1.5 hover:bg-neutral-100 transition-colors"
+            >
                 home
             </Link>
 
             <button
                 onClick={handleSignOut}
-                className="absolute top-4 right-4 text-base border border-gray-400 rounded px-4 py-2 hover:bg-gray-100 transition-colors"
+                className="absolute top-6 right-6 text-sm border border-neutral-300 rounded px-3 py-1.5 hover:bg-neutral-100 transition-colors"
             >
                 sign out
             </button>
 
-            <div className="flex flex-col items-center justify-center min-h-screen font-mono p-8">
-                <div className="text-3xl mb-8">
-                    <p>tinyrev admin</p>
+            <h1 className="text-3xl font-semibold mb-8">tiny<span className="text-[var(--accent)]">rev</span> admin</h1>
+
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full max-w-md">
+                <div className="flex flex-col">
+                    <label htmlFor="type" className="mb-1 font-semibold">review type *</label>
+                    <select
+                        id="type"
+                        name="type"
+                        required
+                        className="border border-neutral-300 rounded p-2 bg-white focus:outline-none focus:ring-2 focus:ring-[var(--accent)]"
+                        onChange={getSelectedType}
+                    >
+                        <option value="">select type</option>
+                        <option value="movie">movie</option>
+                        <option value="series">series</option>
+                        <option value="game">game</option>
+                    </select>
                 </div>
 
-                <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full max-w-2xl text-lg">
-                    <div className="flex flex-col">
-                        <label htmlFor="type" className="mb-2 font-semibold">review type *</label>
-                        <select
-                            id="type"
-                            name="type"
-                            required
-                            className="border border-gray-300 rounded p-2 bg-white"
-                            onChange={getSelectedType}
-                        >
-                            <option value="">select type</option>
-                            <option value="movie">movie</option>
-                            <option value="series">series</option>
-                            <option value="game">game</option>
-                        </select>
-                    </div>
-
-                    <div className="flex flex-col">
-                        <label htmlFor="title" className="mb-2 font-semibold">title</label>
-                        <input
-                            type="text"
-                            id="title"
-                            name="title"
-                            required
-                            placeholder="enter title"
-                            className="border border-gray-300 rounded p-2"
-                            onBlur={handleTitleBlur}
-                        />
-                        {fetchedTitle && (
-                            <p className="text-sm text-gray-600 mt-1">Matched {selectedType}: {fetchedTitle}</p>
-                        )}
-                    </div>
-
-                    {selectedType === 'series' && (
-                        <div className="flex flex-col">
-                            <label htmlFor="season" className="mb-2 font-semibold">season</label>
-                            <input
-                                type="number"
-                                id="season"
-                                name="season"
-                                min="1"
-                                max="100"
-                                required
-                                placeholder="1"
-                                defaultValue="1"
-                                className="border border-gray-300 rounded p-2"
-                            />
-                        </div>
+                <div className="flex flex-col">
+                    <label htmlFor="title" className="mb-1 font-semibold">title</label>
+                    <input
+                        type="text"
+                        id="title"
+                        name="title"
+                        required
+                        placeholder="enter title"
+                        className="border border-neutral-300 rounded p-2 focus:outline-none focus:ring-2 focus:ring-[var(--accent)]"
+                        onBlur={handleTitleBlur}
+                    />
+                    {fetchedTitle && (
+                        <p className="text-sm text-neutral-600 mt-1">Matched {selectedType}: {fetchedTitle}</p>
                     )}
+                </div>
 
+                {selectedType === 'series' && (
                     <div className="flex flex-col">
-                        <label htmlFor="rating" className="mb-2 font-semibold">bigger rating</label>
+                        <label htmlFor="season" className="mb-1 font-semibold">season</label>
                         <input
                             type="number"
-                            id="big_rating"
-                            name="big_rating"
-                            min="0.1"
-                            max="10"
-                            step="0.1"
+                            id="season"
+                            name="season"
+                            min="1"
+                            max="100"
                             required
-                            placeholder="0.0"
-                            className="border border-gray-300 rounded p-2"
+                            defaultValue="1"
+                            className="border border-neutral-300 rounded p-2 focus:outline-none focus:ring-2 focus:ring-[var(--accent)]"
                         />
                     </div>
+                )}
 
-                    <div className="flex flex-col">
-                        <label htmlFor="rating" className="mb-2 font-semibold">tiny rating</label>
-                        <input
-                            type="number"
-                            id="small_rating"
-                            name="small_rating"
-                            min="0.1"
-                            max="10"
-                            step="0.1"
-                            required
-                            placeholder="0.0"
-                            className="border border-gray-300 rounded p-2"
-                        />
-                    </div>
+                <div className="flex flex-col">
+                    <label htmlFor="big_rating" className="mb-1 font-semibold">bigger rating</label>
+                    <input
+                        type="number"
+                        id="big_rating"
+                        name="big_rating"
+                        min="0.1"
+                        max="10"
+                        step="0.1"
+                        required
+                        placeholder="0.0"
+                        className="border border-neutral-300 rounded p-2 focus:outline-none focus:ring-2 focus:ring-[var(--accent)]"
+                    />
+                </div>
 
-                    <button
-                        type="submit"
-                        className="bg-black text-white rounded p-3 mt-4 hover:bg-gray-800 transition-colors font-semibold"
-                    >
-                        add review
-                    </button>
-                </form>
-            </div>
-        </div>
+                <div className="flex flex-col">
+                    <label htmlFor="small_rating" className="mb-1 font-semibold">tiny rating</label>
+                    <input
+                        type="number"
+                        id="small_rating"
+                        name="small_rating"
+                        min="0.1"
+                        max="10"
+                        step="0.1"
+                        required
+                        placeholder="0.0"
+                        className="border border-neutral-300 rounded p-2 focus:outline-none focus:ring-2 focus:ring-[var(--accent)]"
+                    />
+                </div>
+
+                <button
+                    type="submit"
+                    className="bg-black text-white rounded p-3 mt-4 hover:bg-gray-800 transition-colors font-semibold"
+                >
+                    add review
+                </button>
+            </form>
+        </main>
     );
 }
