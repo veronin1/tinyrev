@@ -97,7 +97,7 @@ const getMovieDetailsByTitleOrId = async (input, season = null) => {
     const data = await res.json();
     if (data.error) throw new Error(data.error);
 
-    // Normalize API response
+    // normalise API response
     if (data.movies && data.movies.length > 0) {
         const first = data.movies[0];
         return {
