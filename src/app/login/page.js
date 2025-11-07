@@ -14,12 +14,13 @@ export default function Login() {
         e.preventDefault()
         setLoading(true)
         try {
-            const { data, error} = await supabase.auth.signInWithPassword({
+            const { error} = await supabase.auth.signInWithPassword({
                 email,
                 password
             })
             if (error) {
-                throw error
+                setError(error.message);
+                return;
             }
             router.push('/admin')
         } catch (error) {
