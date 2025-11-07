@@ -202,7 +202,7 @@ export default function Admin() {
                         onBlur={handleTitleBlur}
                     />
                     {fetchedTitle && (
-                        <p className="text-sm text-neutral-600 mt-1">Matched {selectedType}: {fetchedTitle}</p>
+                        <p className="text-sm text-neutral-600 mt-1 normal-case">Matched {selectedType}: {fetchedTitle}</p>
                     )}
                 </div>
 
