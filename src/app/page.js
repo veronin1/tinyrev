@@ -7,18 +7,24 @@ import {useRouter} from "next/navigation";
 
 export default function Home() {
     const [query, setQuery] = useState("");
+    const [results, setResults] = useState([])
     const router = useRouter();
 
     async function handleSearch() {
         if (!query.trim()) return;
         const searchResults = await searchDatabase(query);
 
-        if (searchResults && searchResults.length > 0) {
-            router.push(`/reviews/${searchResults[0].id}`);
-        } else {
+        if (!searchResults || searchResults.length === 0) {
             alert("No results found");
+            return;
         }
 
+        if (searchResults.length === 1) {
+            router.push(`/reviews/${searchResults[0].id}`);
+            return;
+        }
+
+        setResults(searchResults);
     }
 
     function handleKeyDown(e) {
@@ -49,6 +55,23 @@ export default function Home() {
                 onChange={(e) => setQuery(e.target.value)}
                 onKeyDown={handleKeyDown}
             />
+
+            {results.length > 1 && (
+                <ul className="mt-6 space-y-2">
+                    {results.map((r) => (
+                        <li key={r.id}>
+                            <button
+                                onClick={() => router.push(`/reviews/${r.id}`)}
+                                className="text-blue-600 hover:underline cursor-pointer"
+                            >
+                                {r.title}
+                                {r.season && ` (Season ${r.season})`}
+                                ({r.year})
+                            </button>
+                        </li>
+                    ))}
+                </ul>
+            )}
 
             <ul className="flex gap-8 mt-10 text-sm uppercase text-neutral-600">
                 {["all", "movies", "series", "games"].map((x) => (

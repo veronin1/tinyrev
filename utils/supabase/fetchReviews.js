@@ -5,7 +5,7 @@ export const fetchReviews = async (type = null) => {
 
     let query = supabase
         .from('reviews')
-        .select('id, title, genre, imdb_rating, big_rating, tiny_rating, avg_rating, poster_url, year, created_at, type')
+        .select('id, title, genre, imdb_rating, big_rating, tiny_rating, avg_rating, poster_url, year, created_at, type, season')
         .order('created_at', {ascending: false});
 
     if (type) query = query.eq('type', type);
