@@ -3,10 +3,6 @@ import {supabase} from '../../../utils/supabase/client'
 import {useState} from "react";
 import Link from "next/link";
 
-export const signOut = async () => {
-    await supabase.auth.signOut();
-}
-
 export async function addReview({type, title, biggerRating, smallerRating, season}) {
     const {data: {session}, error: sessionError} = await supabase.auth.getSession();
 
@@ -148,12 +144,30 @@ export default function Admin() {
         setSelectedType(e.target.value);
     };
 
+    async function handleSignOut() {
+        try {
+            await supabase.auth.signOut();
+            console.log('User signed out successfully');
+        } catch (error) {
+            console.error('Error signing out:', error);
+        }
+
+        window.location.href = '/';
+    }
+
     return (
         <div className="min-h-screen font-mono p-8 relative">
             <Link href="/"
                   className="absolute top-4 left-4 text-base border border-gray-400 rounded px-4 py-2 hover:bg-gray-100 transition-colors">
                 home
             </Link>
+
+            <button
+                onClick={handleSignOut}
+                className="absolute top-4 right-4 text-base border border-gray-400 rounded px-4 py-2 hover:bg-gray-100 transition-colors"
+            >
+                sign out
+            </button>
 
             <div className="flex flex-col items-center justify-center min-h-screen font-mono p-8">
                 <div className="text-3xl mb-8">
