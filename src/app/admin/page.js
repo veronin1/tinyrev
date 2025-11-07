@@ -72,47 +72,55 @@ const searchOMDB = async (query) => {
     return data.movies;
 };
 
-const getMovieDetails = async (imdbID) => {
-    const res = await fetch(`/api/omdb?imdbID=${encodeURIComponent(imdbID)}`);
+const getMovieDetailsByTitleOrId = async (input, season = null) => {
+    input = input.trim();
+    if (!input) throw new Error("Title or IMDB ID is required");
 
+    let url;
+
+    // Check if input is an IMDB ID
+    if (/^tt\d+$/i.test(input)) {
+        const params = new URLSearchParams({ i: input });
+        if (season) params.append('season', season);
+        url = `/api/omdb?${params.toString()}`;
+    } else {
+        // Title search
+        url = `/api/omdb?title=${encodeURIComponent(input)}`;
+    }
+
+    const res = await fetch(url);
     if (!res.ok) {
         const errorData = await res.json();
         throw new Error(errorData.error || res.statusText);
     }
 
-    return await res.json();
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+
+    // Normalize API response
+    if (data.movies && data.movies.length > 0) {
+        const first = data.movies[0];
+        return {
+            title: first.Title || first.title,
+            year: first.Year || first.year,
+            imdbID: first.imdbID,
+            poster: first.Poster || first.poster,
+            genre: first.Genre || first.genre || "",
+            imdbRating: first.imdbRating || ""
+        };
+    }
+
+    return {
+        title: data.Title || data.title,
+        year: data.Year || data.year,
+        imdbID: data.imdbID,
+        poster: data.Poster || data.poster,
+        genre: data.Genre || data.genre || "",
+        imdbRating: data.imdbRating || ""
+    };
 };
 
-const getMovieDetailsByTitleOrId = async (input, season = null) => {
-    input = input.trim();
 
-    let imdbID;
-    const isImdbId = /^tt\d+$/i.test(input);
-
-    if (isImdbId) {
-        imdbID = input;
-    } else {
-        const movies = await searchOMDB(input);
-        if (!movies || movies.length === 0) {
-            throw new Error("Movie not found");
-        }
-        imdbID = movies[0].imdbID;
-    }
-
-    const params = new URLSearchParams({apikey: process.env.NEXT_PUBLIC_OMDB_API_KEY, i: imdbID});
-    if (season) {
-        params.append('Season', season);
-    }
-
-    const res = await fetch(`/api/omdb?${params.toString()}`);
-    const data = await res.json();
-
-    if (data.Response === "False") {
-        throw new Error(data.Error);
-    }
-
-    return data;
-}
 
 export default function Admin() {
     const [fetchedTitle, setFetchedTitle] = useState("");
