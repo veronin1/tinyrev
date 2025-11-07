@@ -56,6 +56,22 @@ export default function Home() {
                 onKeyDown={handleKeyDown}
             />
 
+            {results.length > 1 && (
+                <ul className="mt-6 space-y-2">
+                    {results.map((r) => (
+                        <li key={r.id}>
+                            <button
+                                onClick={() => router.push(`/reviews/${r.id}`)}
+                                className="text-blue-600 hover:underline"
+                            >
+                                {r.title} ({r.year})
+                            </button>
+                        </li>
+                    ))}
+                </ul>
+            )}
+
+
             <ul className="flex gap-8 mt-10 text-sm uppercase text-neutral-600">
                 {["all", "movies", "series", "games"].map((x) => (
                     <li key={x}>
