@@ -7,18 +7,24 @@ import {useRouter} from "next/navigation";
 
 export default function Home() {
     const [query, setQuery] = useState("");
+    const [results, setResults] = useState([])
     const router = useRouter();
 
     async function handleSearch() {
         if (!query.trim()) return;
         const searchResults = await searchDatabase(query);
 
-        if (searchResults && searchResults.length > 0) {
-            router.push(`/reviews/${searchResults[0].id}`);
-        } else {
+        if (!searchResults || searchResults.length === 0) {
             alert("No results found");
+            return;
         }
 
+        if (searchResults.length === 1) {
+            router.push(`/reviews/${searchResults[0].id}`);
+            return;
+        }
+
+        setResults(searchResults);
     }
 
     function handleKeyDown(e) {
