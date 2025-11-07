@@ -64,7 +64,9 @@ export default function Home() {
                                 onClick={() => router.push(`/reviews/${r.id}`)}
                                 className="text-blue-600 hover:underline"
                             >
-                                {r.title} ({r.year})
+                                {r.title}
+                                {r.season && ` (Season ${r.season})`}
+                                ({r.year})
                             </button>
                         </li>
                     ))}
