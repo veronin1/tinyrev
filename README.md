@@ -1,6 +1,6 @@
 # tinyrev
 
-tiny review website
+Tiny review website.
 
 site: [reviews.veronin.dev](https://reviews.veronin.dev)
 
