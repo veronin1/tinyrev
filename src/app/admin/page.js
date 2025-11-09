@@ -10,96 +10,99 @@ export async function addReview({type, title, biggerRating, smallerRating, seaso
         throw new Error("Session not found");
     }
 
-    console.log('User ID:', session.user.id);
-    console.log('Session:', session);
+    console.log('Starting addReview with:', { type, title, biggerRating, smallerRating, season });
 
-    let seasonNumber = null;
-    if (type === 'series' && season) {
-        if (!season) {
-            throw new Error("Season is required for series");
-        }
-        seasonNumber = parseInt(season, 10);
-        if (isNaN(seasonNumber) || seasonNumber < 1 || seasonNumber > 100) {
-            throw new Error("Invalid season number");
-        }
-    }
+    let reviewData;
 
-    const movie = await getMovieDetailsByTitleOrId(title, seasonNumber);
+    if (type === 'movie' || type === 'series') {
+        let seasonNumber = (type === 'series') ? Number(season) || 1 : null;
 
-    const yearValue = parseInt(movie.year?.slice(0, 4)) || null;
+        console.log('Fetching movie details for:', title);
+        const movie = await getMovieDetailsByTitleOrId(title, seasonNumber);
+        console.log('Movie data fetched:', movie);
 
-    const {data, error} = await supabase
-        .from("reviews")
-        .insert([{
+        reviewData = {
             user_id: session.user.id,
             type,
             title: movie.title,
-            year: yearValue,
+            year: parseInt(movie.year?.slice(0, 4)) || null,
             genre: movie.genre,
             poster_url: movie.poster,
             imdbid: movie.imdbID,
-            imdb_rating: movie.imdbRating,
+            imdb_rating: parseFloat(movie.imdbRating) || null,
             big_rating: biggerRating,
             tiny_rating: smallerRating,
             season: seasonNumber,
-        }]);
+        };
+    } else if (type === 'game') {
+        reviewData = {
+            user_id: session.user.id,
+            type,
+            title: title,
+            year: null,
+            genre: null,
+            poster_url: null,
+            imdbid: null,
+            imdb_rating: null,
+            big_rating: biggerRating,
+            tiny_rating: smallerRating,
+            season: null,
+        };
+    } else {
+        throw new Error("Invalid review type specified");
+    }
+
+    console.log('Inserting data:', reviewData);
+
+    const { data, error } = await supabase
+        .from("reviews")
+        .insert([reviewData])
+        .select();
 
     if (error) {
+        console.error('Supabase insert error:', error);
         throw new Error(error.message);
     }
 
+    console.log('Insert successful:', data);
     return data;
 }
 
-const getMovieDetailsByTitleOrId = async (input, season = null) => {
+const getMovieDetailsByTitleOrId = async (input) => {
     input = input.trim();
     if (!input) throw new Error("Title or IMDB ID is required");
 
-    let url;
+    try {
+        const params = new URLSearchParams();
 
-    // check if input is an IMDB ID through regex
-    if (/^tt\d+$/i.test(input)) {
-        const params = new URLSearchParams({ i: input });
-        if (season) params.append('season', season);
-        url = `/api/omdb?${params.toString()}`;
-    } else {
-        // title search
-        url = `/api/omdb?title=${encodeURIComponent(input)}`;
-    }
+        if (/^tt\d+$/i.test(input)) {
+            params.append('i', input);
+        } else {
+            params.append('t', input);
+        }
 
-    const res = await fetch(url);
-    if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.error || res.statusText);
-    }
+        const url = `/api/omdb?${params.toString()}`;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(`API error: ${res.status}`);
 
-    const data = await res.json();
-    if (data.error) throw new Error(data.error);
+        const data = await res.json();
+        if (data.error) throw new Error(data.error);
+        if (!data.movies || !data.movies[0]) throw new Error("No movie found with that title or ID");
 
-    // normalise API response
-    if (data.movies && data.movies.length > 0) {
-        const first = data.movies[0];
+        const movie = data.movies[0];
         return {
-            title: first.Title || first.title,
-            year: first.Year || first.year,
-            imdbID: first.imdbID,
-            poster: first.Poster || first.poster,
-            genre: first.Genre || first.genre || "",
-            imdbRating: first.imdbRating || ""
+            title: movie.Title || movie.title,
+            year: movie.Year || movie.year,
+            imdbID: movie.imdbID,
+            poster: movie.Poster || movie.poster,
+            genre: movie.Genre || movie.genre || "",
+            imdbRating: movie.imdbRating || ""
         };
+    } catch (error) {
+        console.error('Error fetching movie details:', error);
+        throw new Error(`Failed to fetch movie details: ${error.message}`);
     }
-
-    return {
-        title: data.Title || data.title,
-        year: data.Year || data.year,
-        imdbID: data.imdbID,
-        poster: data.Poster || data.poster,
-        genre: data.Genre || data.genre || "",
-        imdbRating: data.imdbRating || ""
-    };
 };
-
-
 
 export default function Admin() {
     const [fetchedTitle, setFetchedTitle] = useState("");
@@ -112,11 +115,15 @@ export default function Admin() {
             return;
         }
 
-        try {
-            const movie = await getMovieDetailsByTitleOrId(titleInput);
-            setFetchedTitle(movie.title);
-        } catch (error) {
-            console.error(error);
+        if (selectedType === 'movie' || selectedType === 'series') {
+            try {
+                const movie = await getMovieDetailsByTitleOrId(titleInput, null);
+                setFetchedTitle(movie.title);
+            } catch (error) {
+                console.error("Blur fetch error:", error.message);
+                setFetchedTitle("Not found - check title");
+            }
+        } else {
             setFetchedTitle("");
         }
     }
@@ -127,11 +134,29 @@ export default function Admin() {
             const formData = new FormData(e.target);
             const type = formData.get('type');
             const title = formData.get('title');
-            const biggerRating = formData.get('big_rating');
-            const smallerRating = formData.get('small_rating');
-            const season = formData.get('season');
 
-            await addReview({type, title, biggerRating, smallerRating, season});
+            // Convert string to float, fallback to null
+            const biggerRating = parseFloat(formData.get('big_rating')) || null;
+            const smallerRating = parseFloat(formData.get('small_rating')) || null;
+
+            let seasonNumber = null;
+            if (type === 'series') {
+                const seasonInput = formData.get('season');
+                seasonNumber = parseInt(seasonInput, 10) || 1; // default 1
+                if (seasonNumber < 1 || seasonNumber > 100) {
+                    alert("Invalid season number");
+                    return;
+                }
+            }
+
+            await addReview({
+                type,
+                title,
+                biggerRating,
+                smallerRating,
+                season: seasonNumber
+            });
+
             alert('Review added successfully');
             e.target.reset();
         } catch (error) {
@@ -139,6 +164,7 @@ export default function Admin() {
             alert(error.message);
         }
     };
+
 
     const getSelectedType = (e) => {
         setSelectedType(e.target.value);
